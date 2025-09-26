@@ -1,70 +1,202 @@
-# Getting Started with Create React App
+# WebSocket POC - React Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This React application demonstrates comprehensive WebSocket functionality including bidirectional chat, real-time notifications, live data streaming, and user presence tracking. Built with React 19, STOMP.js, and SockJS for robust WebSocket communication.
 
-## Available Scripts
+## 🚀 Quick Start
 
-In the project directory, you can run:
+```bash
+# Install dependencies
+npm install
 
-### `npm start`
+# Start development server (requires backend at localhost:8080)
+npm start
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+# Build for production
+npm run build
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Visit `http://localhost:3000` and navigate to **📚 Docs** for comprehensive documentation.
 
-### `npm test`
+## 📋 Features
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 🔗 Connection Management
+- Auto-connect on app load
+- Manual connect/disconnect controls
+- Real-time connection status display
+- Username configuration
 
-### `npm run build`
+### 💬 Bidirectional Chat
+- **Private Chat (1-to-1)**: Direct messaging between users
+- **Group Chat Rooms**: Multiple room support (General, Tech Support, Announcements)
+- Real-time message delivery
+- Message history display
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 📢 Unidirectional Broadcasting
+- **Notifications**: Broadcast system-wide notifications with severity levels
+- **Live Data Streaming**: Real-time data updates (metrics, status, sensor data)
+- Auto-simulation mode for demo purposes
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 👥 User Presence Tracking
+- Online/Away/Busy/Offline status updates
+- Real-time user list
+- Status change broadcasting
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 📚 Documentation
+- **Comprehensive Docs**: In-app documentation system with detailed API reference
+- **Architecture Guide**: Complete frontend architecture documentation
+- **Integration Flow**: Step-by-step WebSocket message flow diagrams
+- **Component Reference**: Detailed component documentation with examples
+- **Deployment Guide**: Production deployment instructions
 
-### `npm run eject`
+## 📖 Documentation
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+This project includes comprehensive in-app documentation accessible via the **📚 Docs** section. The documentation covers:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **Project Overview**: Features, architecture, and technology stack
+- **Component Reference**: Detailed component APIs and usage examples
+- **Backend Integration**: WebSocket protocol and message flow documentation
+- **API Reference**: Complete STOMP and REST API documentation
+- **Deployment Guide**: Production deployment and configuration instructions
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🛠️ Technology Stack
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **React 19.1.1**: Modern React with hooks and functional components
+- **React Router 7.9.2**: Client-side routing
+- **@stomp/stompjs 7.1.1**: WebSocket messaging protocol
+- **SockJS Client 1.6.1**: WebSocket fallback support
+- **Create React App 5.0.1**: Build tooling and development server
 
-## Learn More
+## Getting Started
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Prerequisites
+- Node.js 16+ and npm
+- Backend WebSocket server running on `http://localhost:8080`
+- Java 17+ (for running the Spring Boot backend)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Installation
+```bash
+npm install
+```
 
-### Code Splitting
+### Development
+```bash
+npm start
+```
+The app will open at `http://localhost:3000`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### Build for Production
+```bash
+npm run build
+```
 
-### Analyzing the Bundle Size
+## WebSocket Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+The application connects to WebSocket server at:
+- **URL**: `http://localhost:8080/ws`
+- **Protocol**: SockJS + STOMP
+- **User Parameter**: Configurable username in connection string
 
-### Making a Progressive Web App
+## API Endpoints
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### WebSocket Topics (Subscribe)
+- `/user/queue/messages` - Private messages
+- `/topic/room.{roomName}` - Room messages
+- `/topic/notifications` - System notifications
+- `/topic/live-data` - Real-time data stream
+- `/topic/presence` - User presence updates
+- `/topic/service-updates` - Service notifications
+- `/topic/demo-chat` - Demo messages
 
-### Advanced Configuration
+### WebSocket Destinations (Publish)
+- `/app/chat.private` - Send private message
+- `/app/chat.join.{roomName}` - Join chat room
+- `/app/chat.room.{roomName}` - Send room message
+- `/app/presence.update` - Update user presence
+- `/app/update` - Send service update
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### HTTP REST Endpoints
+- `POST /api/broadcast/notification` - Send broadcast notification
+- `POST /api/broadcast/data` - Send live data update
+- `GET /api/demo/chat/{message}` - Demo chat test
+- `GET /api/demo/notification/{message}` - Demo notification test
 
-### Deployment
+## Usage Examples
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Sending Private Messages
+```javascript
+const message = {
+  sender: "User1",
+  receiver: "User2",
+  message: "Hello there!"
+};
+webSocketService.publish('/app/chat.private', message);
+```
 
-### `npm run build` fails to minify
+### Broadcasting Notifications
+```javascript
+const notification = {
+  title: "System Alert",
+  content: "Maintenance scheduled",
+  severity: "WARNING"
+};
+webSocketService.sendNotification(notification);
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Updating User Presence
+```javascript
+const presence = {
+  userId: "user123",
+  status: "AWAY"
+};
+webSocketService.publish('/app/presence.update', presence);
+```
+
+## Architecture
+
+### Components
+- **WebSocketDemo**: Main container component
+- **PrivateChat**: 1-to-1 messaging functionality
+- **RoomChat**: Group chat rooms
+- **NotificationSystem**: Broadcast notifications
+- **LiveDataStream**: Real-time data streaming
+- **UserPresence**: Presence tracking
+- **ServiceUpdates**: Service notifications
+
+### Services
+- **WebSocketService**: Singleton service for WebSocket management
+- **useWebSocket**: React hook for connection management
+- **useSubscription**: React hook for topic subscriptions
+
+## Demo Functions
+
+The application includes demo buttons to test functionality:
+- **Demo Chat**: Send test message to demo channel
+- **Demo Notification**: Send test notification
+- **Simulate Real-time Data**: Generate mock sensor data for 30 seconds
+- **Clear All Messages**: Reset all message displays
+
+## Responsive Design
+
+The application is fully responsive and includes:
+- Mobile-friendly layouts
+- Touch-optimized buttons
+- Scrollable message areas
+- Collapsible sections on small screens
+
+## Error Handling
+
+- Connection state management
+- Automatic reconnection
+- Error notifications for failed operations
+- Graceful degradation when disconnected
+
+## Browser Compatibility
+
+- Chrome/Chromium-based browsers
+- Firefox
+- Safari
+- Edge
+
+---
+
+**Note**: Make sure your backend WebSocket server is running and configured to handle all the endpoints and topics listed above for full functionality.
